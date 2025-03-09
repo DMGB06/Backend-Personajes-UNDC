@@ -51,7 +51,7 @@ export const loginUser = async ({ email, password }: Usuario) => {
 
   const token = await generateTokenLimitTime(user.email, user.nombres, user.id);
 
-  console.log("🟢 Usuario en backend (antes de enviar al frontend):", user); // Debug
+  console.log("Usuario en backend (antes de enviar al frontend):", user); // Debug
 
   return {
     id: user.id,

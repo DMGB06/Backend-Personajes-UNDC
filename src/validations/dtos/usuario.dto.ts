@@ -1,6 +1,5 @@
 import { Type } from "class-transformer";
-import { IsEmail, IsNegative, IsNumber, IsPositive, IsString } from "class-validator";
-// import { number } from "joi";
+import { IsEmail, IsOptional, IsNumber, IsPositive, IsString ,  ValidateIf } from "class-validator";
 
 export class CrearUsuarioDto {
     @IsEmail()
@@ -14,20 +13,29 @@ export class CrearUsuarioDto {
 }
 
 export class ModificarUsuarioDto {
-
     @IsNumber()
     @IsPositive()
+    @Type(() => Number)
     id: number;
 
-    @IsEmail()
-    email: string;
+    @IsOptional()
+    @IsEmail({}, { message: "El email debe ser válido" }) // Mensaje personalizado
+    email?: string;
+    
+    @IsOptional()
+    @IsString({ message: "El nombre debe ser un texto válido" })
+    nombres?: string;
 
-    @IsString()
-    password: string;
+    @IsOptional()
+    @IsString({ message: "El rol debe ser un texto válido" })
+    rol?: string;
 
-    @IsString()
-    nombres: string;
+    @IsOptional()
+    @ValidateIf((o) => o.password !== undefined)
+    @IsString({ message: "La contraseña debe ser un texto válido" })
+    password?: string;
 }
+
 
 export class GetUsuarioDto {
     @IsNumber()

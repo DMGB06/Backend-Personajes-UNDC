@@ -14,7 +14,7 @@ import { CrearUsuarioDto, ModificarUsuarioDto, GetUsuarioDto } from "../validati
 const router = Router();
 
 //podemos usar DTO's o Joi para validar los datos enviados [Ejemplo]
-router.post("/", validateBodyDto(CrearUsuarioDto),rolRequired(RolUsuario.ADMIN), createUsuarioCtrl);
+router.post("/",rolRequired(RolUsuario.ADMIN), validateBodyDto(CrearUsuarioDto), createUsuarioCtrl);
 
 router.get("/list", rolRequired(RolUsuario.ADMIN), getListaUsuarioCtrl);
 

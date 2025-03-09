@@ -32,27 +32,31 @@ export const updateUsuario = async ({
     id,
     nombres,
     email,
-    password,
+    rol
 }: Usuario) => {
 
     const checkIs = await prisma.usuario.findFirst({
         where: { id },
     });
-    if (!checkIs) return "NO_EXISTE"
-    // if (checkIs?.email && id === 0) return "ALREADY_EXIST";
+
+    if (!checkIs) return "NO_EXISTE";
+
+    // Construimos el objeto `dataToUpdate` SIN el campo `password`
+    const dataToUpdate: any = {
+        nombres,
+        email,
+        rol
+    };
 
     const response = await prisma.usuario.update({
-        where: {
-            id
-        },
-        data: {
-            nombres,
-            email,
-            password: await encrypt(password),
-        }
+        where: { id },
+        data: dataToUpdate
     });
-    return response
+
+    return response;
 };
+
+
 
 export const getListUsuario = async () => {
     return await prisma.usuario.findMany()
