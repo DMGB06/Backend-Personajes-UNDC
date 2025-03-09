@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RolUsuario {
+  REGULAR
+  ADMIN
+}
+
+model Personaje {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  foto      String   // Aquí se almacena la URL de la foto
+  especie   String
+  estado    String
+  origen    String
+  tipo      String
+  genero    String
+  flag      Boolean  @default(true)
+  idUsuario Int
+  usuario   Usuario  @relation(fields: [idUsuario], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Usuario {
+  id        Int        @id @default(autoincrement())
+  nombres   String
+  email     String     @unique
+  password  String
+  rol       RolUsuario @default(REGULAR)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  Personaje Personaje[]
+}
