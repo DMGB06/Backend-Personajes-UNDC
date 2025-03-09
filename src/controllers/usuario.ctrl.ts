@@ -11,7 +11,7 @@ export const createUsuarioCtrl = async ({ body }: Request, res: Response) => {
   try {
     //  Extraemos solo los campos permitidos
     const { email, nombres, password } = body;
-    const allowedFields = ["nombres","email", "password"];
+    const allowedFields = ["id","nombres","email", "password", "rol", "createdAt", "updatedAt"];
     const receivedFields = Object.keys(body);
 
     const extraFields = receivedFields.filter(
@@ -59,10 +59,9 @@ export const updateUsuarioCtrl = async ({ body }: Request, res: Response) => {
     try {
       // Extraemos solo los campos permitidos
       const { id, email, nombres, rol } = body;
-      const allowedFields = ["id", "nombres", "email", "rol"];
+      const allowedFields = ["id", "nombres", "email", "rol", "password", "createdAt", "updatedAt"];
       const receivedFields = Object.keys(body);
-  
-      // Validamos si hay campos no permitidos
+
       const extraFields = receivedFields.filter((field) => !allowedFields.includes(field));
       if (extraFields.length > 0) {
          res.status(400).send({

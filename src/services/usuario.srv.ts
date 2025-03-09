@@ -27,35 +27,44 @@ export const registerUsuario = async ({
     });
     return response
 };
-
 export const updateUsuario = async ({
     id,
     nombres,
     email,
     rol
-}: Usuario) => {
-
+  }: Partial<Usuario> & { id: number }) => {
+  
     const checkIs = await prisma.usuario.findFirst({
-        where: { id },
+      where: { id },
     });
-
+  
     if (!checkIs) return "NO_EXISTE";
-
-    // Construimos el objeto `dataToUpdate` SIN el campo `password`
-    const dataToUpdate: any = {
-        nombres,
-        email,
-        rol
-    };
-
+  
+    // Solo incluye en dataToUpdate los campos que realmente estén presentes
+    const dataToUpdate: any = {};
+    if (nombres) dataToUpdate.nombres = nombres;
+    if (email) dataToUpdate.email = email;
+    if (rol) dataToUpdate.rol = rol;
+  
+    // Si no hay nada que actualizar
+    if (Object.keys(dataToUpdate).length === 0) {
+      return "NO_CHANGES";
+    }
+  
     const response = await prisma.usuario.update({
-        where: { id },
-        data: dataToUpdate
+      where: { id },
+      data: dataToUpdate,
+      select: {
+        id: true,
+        nombres: true,
+        email: true,
+        rol: true,
+      }
     });
-
+  
     return response;
-};
-
+  };
+  
 
 
 export const getListUsuario = async () => {
